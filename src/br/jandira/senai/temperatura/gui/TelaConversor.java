@@ -1,10 +1,15 @@
 package br.jandira.senai.temperatura.gui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import model.Temperatura.java;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 /**
  * Classe responsável pela interface gráfica do conversor
@@ -61,7 +66,7 @@ public class TelaConversor extends JFrame {
     private void converterTemperatura(String tipo) {
         try {
             double celsius = Double.parseDouble(txtCelsius.getText());
-            br.jandira.senai.temperatura.model.Temperatura temp = new br.jandira.senai.temperatura.model.Temperatura(celsius);
+            br.jandira.senai.temperatura.model.Temperatura temp = new br.jandira.senai.temperatura.model.Temperatura();
             
             if (tipo.equals("F")) {
                 double fahrenheit = temp.converterParaFahrenheit();
