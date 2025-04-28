@@ -1,112 +1,80 @@
 package br.jandira.senai.temperatura.gui;
 
-public class TelaConversor {
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import model.Temperatura.java;
 
-	import java.awt.Dimension;
+/**
+ * Classe responsável pela interface gráfica do conversor
+ */
+public class TelaConversor extends JFrame {
+    private JTextField txtCelsius;
+    private JLabel lblResultado;
+    private JLabel lblErro;
 
-	import javax.swing.JButton;
-	import javax.swing.JFrame;
-	import javax.swing.JLabel;
-	import javax.swing.JList;
-	import javax.swing.JTextArea;
-	import javax.swing.JTextField;
+    public TelaConversor() {
+        // Configuração básica da janela
+        setTitle("Conversor de Temperatura");
+        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new GridLayout(5, 1, 10, 10));
 
-	public class TelaConversor {
-	    private JLabel ;
-	    private JTextField txtMultiplicando;
-	    private JLabel labelMinMultiplicador;
-	    private JTextField txtMinMultiplicador;
-	    private JLabel labelMaxMultiplicador;
-	    private JTextField txtMaxMultiplicador;
-	    private JButton btnCalcular;
-	    private JButton btnLimpar;
-	    private JLabel labelResultado;
-	    private JScrollPane scrollTabuada;
-	    private JList listaTabuada;
-	    
-	    
-		public void criarTela() {
-			
-	JFrame tela = new JFrame();
-			
+        // Componentes da interface
+        JLabel lblTitulo = new JLabel("Digite a temperatura em Celsius:", SwingConstants.CENTER);
+        txtCelsius = new JTextField();
+        JButton btnFahrenheit = new JButton("FAHRENHEIT");
+        JButton btnKelvin = new JButton("KELVIN");
+        lblResultado = new JLabel("", SwingConstants.CENTER);
+        lblErro = new JLabel("", SwingConstants.CENTER);
+        lblErro.setForeground(Color.RED);
 
-			//Definir o tamanho da tela atraves de um objeto Dimension:
-			Dimension tamanho = new  Dimension();
-			tamanho.setSize(335, 700);
-			tela.setSize(tamanho);
-			tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			tela.setTitle("Tabuada");
-			tela.setLayout(null);
-			tela.setLocationRelativeTo(tela);
-			tela.setResizable(false);
-			
-			
-			//Criar um JLabel e um JTextField para o multiplicando:
-		    labelMultiplicando = new JLabel();
-			labelMultiplicando.setText("Valor do Multiplicante: ");
-			labelMultiplicando.setBounds(50, 40, 150, 30);
-			
-			
-			//Criar um JLabel e um JTextField para o multiplicando:
-			labelMinMultiplicador = new JLabel();
-			labelMinMultiplicador.setText("Mínimo Multiplicador: ");
-			labelMinMultiplicador.setBounds(50, 80, 150, 30);
-			
-			txtMinMultiplicador = new JTextField();
-			txtMinMultiplicador.setBounds(210, 80, 60, 30);
-			
-			
-			// Adicionando o Maximo Multiplicador: 
-			labelMaxMultiplicador = new JLabel();
-			labelMaxMultiplicador.setText("Maxímo Multiplicador:");
-			labelMaxMultiplicador.setBounds(50, 120, 150, 30);
-			
-			txtMaxMultiplicador = new JTextField();
-			txtMaxMultiplicador.setBounds(210, 120, 60, 30);
-			
-			
-			// Adicionando os Botões:
-			btnCalcular = new JButton();
-			btnCalcular.setText("Calcular");
-			btnCalcular.setBounds(50, 160, 105, 30);
-			
-			btnLimpar = new JButton();
-			btnLimpar.setText("Limpar");
-			btnLimpar.setBounds(165, 160, 105, 30);
-			
-			
-			// Label do Resultado:
-			labelResultado = new JLabel();
-			labelResultado.setText("Resultado: ");
-			labelResultado.setBounds(50, 200, 200, 30);
-			
-			
-			// Criando o Painel de Rolagem para a lista
-			listaTabuada = new JList();
-			
-			//Criando painel de rolagem para a lista 
-			scrollTabuada = new JScrollPane(listaTabuada);
-			scrollTabuada.setBounds(50, 240, 220, 380);
-			
-			
-			// Criando a lista que exibirá a tabuada
+        // Adicionando componentes à janela
+        add(lblTitulo);
+        add(txtCelsius);
+        add(btnFahrenheit);
+        add(btnKelvin);
+        add(lblResultado);
+        add(lblErro);
 
-			//listaTabuada.setListData(cidades);
-			
-			
-			//Criar um TextField:
-			
-			txtMultiplicando = new JTextField();
-			txtMultiplicando.setBounds(210, 40, 60, 30);
-			
-			
-			// Adicionando os componentes ao painel de conteúdo:
-			tela.getContentPane().add(labelMultiplicando);
-			tela.getContentPane().add(txtMultiplicando);		
-			tela.getContentPane().add(labelMinMultiplicador);
-			tela.getContentPane().add(txtMinMultiplicador);		
-			tela.getContentPane().add(labelMaxMultiplicador);
-			tela.getContentPane().add(txtMaxMultiplicador);		
-			tela.getContentPane().add(btnCalcular);	
-			tela.getContentPane().add(btnLimpar);	
-			tela.getContentPane().add(labelResultado);	
+        // Configuração dos botões
+        btnFahrenheit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                converterTemperatura("F");
+            }
+        });
+
+        btnKelvin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                converterTemperatura("K");
+            }
+        });
+    }
+
+    /**
+     * Método para realizar a conversão
+      tipo "F" para Fahrenheit ou "K" para Kelvin
+     */
+    private void converterTemperatura(String tipo) {
+        try {
+            double celsius = Double.parseDouble(txtCelsius.getText());
+            br.jandira.senai.temperatura.model.Temperatura temp = new br.jandira.senai.temperatura.model.Temperatura(celsius);
+            
+            if (tipo.equals("F")) {
+                double fahrenheit = temp.converterParaFahrenheit();
+                lblResultado.setText(String.format("%.2f °FAHRENHEIT", fahrenheit));
+            } else {
+                double kelvin = temp.converterParaKelvin();
+                lblResultado.setText(String.format("%.2f KELVIN", kelvin));
+            }
+            
+            lblErro.setText("");
+        } catch (NumberFormatException ex) {
+            lblErro.setText("Entrada inválida! Digite apenas números.");
+            lblResultado.setText("");
+        }
+    }
+}
